@@ -3,6 +3,31 @@
  */
 
 
+var Util = function() {
+};
+
+Util.getCombinations = function(array, size, start, initialStuff, output) {
+    if (initialStuff.length >= size) {
+        output.push(initialStuff);
+    } else {
+        var i;
+
+        for (i = start; i < array.length; ++i) {
+            Util.getCombinations(array, size, i + 1, initialStuff.concat(array[i]), output);
+        }
+    }
+}
+
+Util.getAllPossibleCombinations = function(array, size, output) {
+    Util.getCombinations(array, size, 0, [], output);
+}
+
+
+function subArray(arr, comb) {
+    return _(comb).difference(arr).length === 0;
+
+}
+
 function objToArray(data) {
     return data.map(function (obj) {
 
@@ -29,17 +54,19 @@ function getUniqueValues(data) {
 }
 
 // u - unique values, data - dataset to look for occurances into
-function countOccurances(data) {
+function countOccurances(data, uniqArr) {
     var occ = {}; // occurances table for example [{'A': 2(times)}]
-
     data.map(function (obj) {
-        obj.map(function (elem) {
-            elem = String(elem);
-            if (!occ[elem]) {
-                occ[elem] = 1;
+        uniqArr.map(function (elem) {
+            if(typeof(elem) != "object"){
+                elem = [elem];
             }
-            else {
-                occ[elem]++;
+            var key = String(elem);
+            if (!occ[key] && subArray(obj, elem)) {
+                occ[key] = 1;
+            }
+            else if(subArray(obj, elem)){
+                occ[key]++;
             }
         })
     });
