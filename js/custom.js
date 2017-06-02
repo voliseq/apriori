@@ -10,7 +10,7 @@
         lastSupportedComb;
 
     let combinations = [],
-        data = objToArray(iris),
+        data = objToArray(wine),
         // data = stringToArray(grimm),
         uniqArr = getUniqueValues(data).filter(x => x!=""),
         occ = countOccurances(data, uniqArr),
