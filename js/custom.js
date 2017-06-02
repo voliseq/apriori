@@ -1,20 +1,33 @@
 (function () {
 
 
-    function 
 
-    var combinations = [];
-    var data = objToArray(iris);
-    var uniqArr = getUniqueValues(data);
-    var occ = countOccurances(data, uniqArr);
-    var supported = checkSupport(occ, data, 0.04);
-    Util.getAllPossibleCombinations(supported,2,combinations);
+    let supp = 0.05,
+        size = 2,
+        maxSize = 2,
+        lastOcc,
+        supportedComb,
+        lastSupportedComb;
 
+    let combinations = [],
+        data = objToArray(iris),
+        // data = stringToArray(grimm),
+        uniqArr = getUniqueValues(data).filter(x => x!=""),
+        occ = countOccurances(data, uniqArr),
+        supported = checkSupport(occ, data, supp);
 
-    var occ2 = countOccurances(data, combinations);
-    var supported2 = checkSupport(occ2, data, 0.04);
-    console.log(occ2, supported2);
+    supportedComb = supported;
 
+    while (supported.length > 0 && size <= maxSize) {
+        Util.getAllPossibleCombinations(supported, size, combinations);
+        lastOcc = occ;
+        occ = countOccurances(data, combinations);
+        lastSupportedComb = supportedComb;
+        supportedComb = checkSupport(occ, data, supp);
+        combinations = [];
+        size++;
+    }
 
+    console.log(supportedComb, occ);
 
 })();

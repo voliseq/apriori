@@ -3,14 +3,14 @@
  */
 
 
-var Util = function() {
+let Util = function() {
 };
 
 Util.getCombinations = function(array, size, start, initialStuff, output) {
     if (initialStuff.length >= size) {
         output.push(initialStuff);
     } else {
-        var i;
+        let i;
 
         for (i = start; i < array.length; ++i) {
             Util.getCombinations(array, size, i + 1, initialStuff.concat(array[i]), output);
@@ -22,6 +22,43 @@ Util.getAllPossibleCombinations = function(array, size, output) {
     Util.getCombinations(array, size, 0, [], output);
 }
 
+function stringToArray(data){
+
+    let sentences = [],
+        words = [],
+        temp;
+
+    temp = data.replace(/\,/g,'')
+        .replace(/\;/g, '')
+        .replace(/\:/g, '')
+        .replace(/\'/g, '')
+        .replace(/\`/g, '')
+        .replace("?", "")
+        .replace(/\!/g,'');
+
+    temp = temp.split("\n")
+        .map(function(elem){
+        return elem.split(".");
+    });
+
+    temp.map(function(elem){
+        return elem.map(function(elem){
+            return elem.split(" ");
+        })
+    });
+
+    temp.map(function(elem){
+        elem.map(function(elem){
+            sentences.push(elem);
+        })
+    });
+
+    sentences.forEach(function(e, i){
+        words.push(e.split(" "));
+    });
+
+    return words;
+}
 
 function subArray(arr, comb) {
     return _(comb).difference(arr).length === 0;
@@ -34,13 +71,17 @@ function objToArray(data) {
         return Object.keys(obj).sort().filter(function (key) {
             return key != "class";
         }).map(function (key) {
+            if(typeof obj[key] != "string"){
+                obj[key] = String(obj[key]);
+            }
+
             return obj[key].replace(",", ".");
         });
     });
 }
 
 function getUniqueValues(data) {
-    var uniqArr = [];
+    let uniqArr = [];
     data.map(function (arr) {
         arr.map(function (elem) {
             if (uniqArr.indexOf(elem) == -1) {
@@ -55,13 +96,13 @@ function getUniqueValues(data) {
 
 // u - unique values, data - dataset to look for occurances into
 function countOccurances(data, uniqArr) {
-    var occ = {}; // occurances table for example [{'A': 2(times)}]
+    let occ = {}; // occurances table for example [{'A': 2(times)}]
     data.map(function (obj) {
         uniqArr.map(function (elem) {
             if(typeof(elem) != "object"){
                 elem = [elem];
             }
-            var key = String(elem);
+            let key = String(elem);
             if (!occ[key] && subArray(obj, elem)) {
                 occ[key] = 1;
             }
@@ -77,9 +118,9 @@ function countOccurances(data, uniqArr) {
 
 function checkSupport(occ, data, s) {
 
-    var supported = [];
-    var dataLength = data.length;
-    for (var key in occ) {
+    let supported = [];
+    let dataLength = data.length;
+    for (let key in occ) {
         if (occ[key] / dataLength >= s) {
             supported.push(key);
         }
@@ -89,11 +130,11 @@ function checkSupport(occ, data, s) {
 }
 
 function combine(arra, arra_size) {
-    var result_set = [],
+    let result_set = [],
         result;
 
 
-    for (var x = 0; x < Math.pow(2, arra.length); x++) {
+    for (let x = 0; x < Math.pow(2, arra.length); x++) {
         result = [];
         i = arra.length - 1;
         do

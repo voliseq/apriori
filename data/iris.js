@@ -1,4 +1,4 @@
-var iris = [
+let iris = [
     {
         "leaf-length": "5,10",
         "leaf-width": "3,50",
